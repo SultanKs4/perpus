@@ -19,15 +19,6 @@ class Perpus_model extends CI_Model
         }
     }
 
-    public function getAnggota($id = null)
-    {
-        if ($id == null) {
-            return $this->db->get('anggota')->result_array();
-        } else {
-            return $this->db->get_where('anggota', ['id' => $id])->result_array();
-        }
-    }
-
     public function getTable($table, $tableid, $id = null)
     {
         if ($id == null) {
@@ -65,7 +56,23 @@ class Perpus_model extends CI_Model
         if ($id == null) {
             return $this->db->get()->result_array();
         } else {
-            return $this->db->get()->where('idbuku', $id)->result_array();
+            $this->db->where('buku.id', $id);
+            return $this->db->get()->result_array();
+        }
+    }
+
+    public function getAnggota($id = null)
+    {
+        $this->db->select('anggota.id, anggota.nama, anggota.alamat, anggota.telepon, level.level, anggota.username');
+        $this->db->from('anggota');
+        $this->db->join('level', 'anggota.level = level.id');
+        $this->db->order_by('id', 'asc');
+
+        if ($id == null) {
+            return $this->db->get()->result_array();
+        } else {
+            $this->db->where('anggota.id', $id);
+            return $this->db->get()->result_array();
         }
     }
 }

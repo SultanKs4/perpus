@@ -3,10 +3,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use chriskacerguis\RestServer\RestController;
 
-class Buku extends RestController
+class Anggota extends RestController
 {
+
     public function __construct()
     {
+        // Construct the parent class
         parent::__construct();
         $this->load->model('perpus_model', 'perpus');
     }
@@ -15,15 +17,15 @@ class Buku extends RestController
     {
         $id = $this->get('id');
         if ($id === NULL) {
-            $kategori = $this->perpus->getBuku();
+            $anggota = $this->perpus->getAnggota();
         } else {
-            $kategori = $this->perpus->getBuku($id);
+            $anggota = $this->perpus->getAnggota($id);
         }
 
-        if ($kategori) {
+        if ($anggota) {
             $this->response([
                 'status' => TRUE,
-                'data' => $kategori
+                'data' => $anggota
             ], RestController::HTTP_OK);
         } else {
             $this->response([
@@ -36,17 +38,18 @@ class Buku extends RestController
     public function index_post()
     {
         $data = [
-            'idkategori' => $this->post('idkategori'),
-            'judul' => $this->post('judul'),
-            'penerbit' => $this->post('penerbit'),
-            'penulis' => $this->post('penulis'),
-            'rak' => $this->post('rak')
+            'nama' => $this->post('nama'),
+            'alamat' => $this->post('alamat'),
+            'telepon' => $this->post('telepon'),
+            'level' => $this->post('level'),
+            'username' => $this->post('username'),
+            'password' => md5($this->post('password'))
         ];
 
-        if ($this->perpus->insertTable('buku', $data) > 0) {
+        if ($this->perpus->insertTable('anggota', $data) > 0) {
             $this->response([
                 'status' => true,
-                'message' => 'Data buku dibuat'
+                'message' => 'Data anggota dibuat'
             ], RestController::HTTP_CREATED);
         } else {
             //id not found
@@ -61,17 +64,18 @@ class Buku extends RestController
     {
         $id = $this->put('id');
         $data = [
-            'idkategori' => $this->put('idkategori'),
-            'judul' => $this->put('judul'),
-            'penerbit' => $this->put('penerbit'),
-            'penulis' => $this->put('penulis'),
-            'rak' => $this->put('rak')
+            'nama' => $this->put('nama'),
+            'alamat' => $this->put('alamat'),
+            'telepon' => $this->put('telepon'),
+            'level' => $this->put('level'),
+            'username' => $this->put('username'),
+            'password' => md5($this->put('password'))
         ];
 
-        if ($this->perpus->updateTable('buku', 'id', $data, $id) > 0) {
+        if ($this->perpus->updateTable('anggota', 'id', $data, $id) > 0) {
             $this->response([
                 'status' => true,
-                'message' => 'Data buku Diupdate'
+                'message' => 'Data anggota diupdate'
             ], RestController::HTTP_OK);
         } else {
             $this->response([
@@ -91,7 +95,7 @@ class Buku extends RestController
                 'message' => 'Berikan id yang valid'
             ], RestController::HTTP_BAD_REQUEST);
         } else {
-            if ($this->perpus->deleteTable('buku', 'id', $id) > 0) {
+            if ($this->perpus->deleteTable('anggota', 'id', $id) > 0) {
                 $this->response([
                     'status' => true,
                     'id' => $id,

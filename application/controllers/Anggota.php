@@ -5,7 +5,7 @@ use GuzzleHttp\Exception\GuzzleException;
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class buku extends CI_Controller
+class anggota extends CI_Controller
 {
     private $client;
 
@@ -15,7 +15,7 @@ class buku extends CI_Controller
 
         $this->client = new GuzzleHttp\Client(['base_uri' => base_url() . "api/"]);
 
-        if ($this->session->userdata('level') == null) {
+        if ($this->session->userdata('level') != "3") {
             redirect('login', 'refresh');
         }
     }
@@ -23,17 +23,17 @@ class buku extends CI_Controller
     public function index()
     {
         try {
-            $response = $this->client->get('buku');
+            $response = $this->client->get('anggota');
         } catch (GuzzleException $th) {
             echo $th->getMessage();
             return null;
         }
         if ($response->getStatusCode() == 200) {
             $body = json_decode($response->getBody()->getContents(), true);
-            $data['title'] = 'Data Buku';
-            $data['buku'] = $body['data'];
+            $data['title'] = 'Data Anggota';
+            $data['anggota'] = $body['data'];
             $this->load->view('template/header', $data);
-            $this->load->view('buku/index', $data);
+            $this->load->view('anggota/index', $data);
             $this->load->view('template/footer');
         }
     }
@@ -41,38 +41,40 @@ class buku extends CI_Controller
     public function edit($id)
     {
         try {
-            $response = $this->client->get('buku?id=' . $id);
-            $responseKategori = $this->client->get('kategori');
+            $response = $this->client->get('anggota?id=' . $id);
+            $responseLevel = $this->client->get('level');
         } catch (GuzzleException $th) {
             echo $th->getMessage();
             return null;
         }
         if ($response->getStatusCode() == 200) {
             $body = json_decode($response->getBody()->getContents(), true);
-            $bodyKategori = json_decode($responseKategori->getBody()->getContents(), true);
-            $data['title'] = 'Form Edit Data Buku';
-            $data['buku'] = $body['data'][0];
-            $data['kategori'] = $bodyKategori['data'];
+            $bodyLevel = json_decode($responseLevel->getBody()->getContents(), true);
+            $data['title'] = 'Form Edit Data anggota';
+            $data['anggota'] = $body['data'][0];
+            $data['level'] = $bodyLevel['data'];
 
-            $this->form_validation->set_rules('judul', 'Judul', 'trim|required');
-            $this->form_validation->set_rules('penerbit', 'Penerbit', 'trim|required');
-            $this->form_validation->set_rules('penulis', 'Penulis', 'trim|required');
-            $this->form_validation->set_rules('rak', 'Rak', 'trim|required');
-            $this->form_validation->set_rules('idkategori', 'Kategori', 'trim|required|numeric');
+            $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+            $this->form_validation->set_rules('alamat', 'Alamat', 'trim|required');
+            $this->form_validation->set_rules('telepon', 'Telepon', 'trim|required|numeric');
+            $this->form_validation->set_rules('level', 'Level', 'trim|required|numeric');
+            $this->form_validation->set_rules('username', 'Username', 'trim|required');
+            $this->form_validation->set_rules('password', 'Password', 'trim|required');
             if ($this->form_validation->run() ==  FALSE) {
                 $this->load->view('template/header', $data);
-                $this->load->view('buku/edit', $data);
+                $this->load->view('anggota/edit', $data);
                 $this->load->view('template/footer');
             } else {
                 try {
-                    $response = $this->client->put('buku', [
+                    $response = $this->client->put('anggota', [
                         'form_params' => [
                             'id' => $this->input->post('id'),
-                            'idkategori' => $this->input->post('idkategori'),
-                            'judul' => $this->input->post('judul'),
-                            'penerbit' => $this->input->post('penerbit'),
-                            'penulis' => $this->input->post('penulis'),
-                            'rak' => $this->input->post('rak')
+                            'nama' => $this->input->post('nama'),
+                            'alamat' => $this->input->post('alamat'),
+                            'telepon' => $this->input->post('telepon'),
+                            'level' => $this->input->post('level'),
+                            'username' => $this->input->post('username'),
+                            'password' => $this->input->post('password')
                         ]
                     ]);
                 } catch (GuzzleException $th) {
@@ -81,7 +83,7 @@ class buku extends CI_Controller
                 }
                 if ($response->getStatusCode() == 200) {
                     $this->session->set_flashdata('flash-data', 'diedit');
-                    redirect('buku', 'refresh');
+                    redirect('anggota', 'refresh');
                 }
             }
         }
@@ -90,7 +92,7 @@ class buku extends CI_Controller
     public function delete($id)
     {
         try {
-            $response = $this->client->delete('buku', [
+            $response = $this->client->delete('anggota', [
                 'form_params' => [
                     'id' => $id
                 ]
@@ -101,7 +103,7 @@ class buku extends CI_Controller
         }
         if ($response->getStatusCode() == 200) {
             $this->session->set_flashdata('flash-data', 'dihapus');
-            redirect('buku', 'refresh');
+            redirect('anggota', 'refresh');
         }
     }
 
@@ -109,33 +111,38 @@ class buku extends CI_Controller
     {
         try {
             $responseKategori = $this->client->get('kategori');
+            $responseLevel = $this->client->get('level');
         } catch (GuzzleException $th) {
             echo $th->getMessage();
             return null;
         }
         if ($responseKategori->getStatusCode() == 200) {
             $bodyKategori = json_decode($responseKategori->getBody()->getContents(), true);
-            $data['title'] = 'Form Menambahkan Data Buku';
+            $bodyLevel = json_decode($responseLevel->getBody()->getContents(), true);
+            $data['title'] = 'Form Menambahkan Data anggota';
             $data['kategori'] = $bodyKategori['data'];
+            $data['level'] = $bodyLevel['data'];
 
-            $this->form_validation->set_rules('judul', 'Judul', 'trim|required');
-            $this->form_validation->set_rules('penerbit', 'Penerbit', 'trim|required');
-            $this->form_validation->set_rules('penulis', 'Penulis', 'trim|required');
-            $this->form_validation->set_rules('rak', 'Rak', 'trim|required');
-            $this->form_validation->set_rules('idkategori', 'Kategori', 'trim|required|numeric');
+            $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+            $this->form_validation->set_rules('alamat', 'Alamat', 'trim|required');
+            $this->form_validation->set_rules('telepon', 'Telepon', 'trim|required|numeric');
+            $this->form_validation->set_rules('level', 'Level', 'trim|required|numeric');
+            $this->form_validation->set_rules('username', 'Username', 'trim|required');
+            $this->form_validation->set_rules('password', 'Password', 'trim|required');
             if ($this->form_validation->run() ==  FALSE) {
                 $this->load->view('template/header', $data);
-                $this->load->view('buku/add', $data);
+                $this->load->view('anggota/add', $data);
                 $this->load->view('template/footer');
             } else {
                 try {
-                    $response = $this->client->post('buku', [
+                    $response = $this->client->post('anggota', [
                         'form_params' => [
-                            'idkategori' => $this->input->post('idkategori'),
-                            'judul' => $this->input->post('judul'),
-                            'penerbit' => $this->input->post('penerbit'),
-                            'penulis' => $this->input->post('penulis'),
-                            'rak' => $this->input->post('rak')
+                            'nama' => $this->input->post('nama'),
+                            'alamat' => $this->input->post('alamat'),
+                            'telepon' => $this->input->post('telepon'),
+                            'level' => $this->input->post('level'),
+                            'username' => $this->input->post('username'),
+                            'password' => $this->input->post('password')
                         ]
                     ]);
                 } catch (GuzzleException $th) {
@@ -144,7 +151,7 @@ class buku extends CI_Controller
                 }
                 if ($response->getStatusCode() == 201) {
                     $this->session->set_flashdata('flash-data', 'ditambahkan');
-                    redirect('buku', 'refresh');
+                    redirect('anggota', 'refresh');
                 }
             }
         }
