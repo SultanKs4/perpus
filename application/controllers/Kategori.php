@@ -15,7 +15,7 @@ class Kategori extends CI_Controller
 
         $this->client = new GuzzleHttp\Client(['base_uri' => base_url() . "api/"]);
 
-        if ($this->session->userdata('level') != "2" || $this->session->userdata('level') != "3") {
+        if (intval($this->session->userdata('level'))  < 2) {
             redirect('login', 'refresh');
         }
     }
