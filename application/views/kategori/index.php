@@ -2,7 +2,6 @@
     <?php if ($this->session->flashdata('flash-data')) : ?>
     <div class="row mt-3">
         <div class="col-md-6">
-            <!-- Jobsheet 3 Praktikum Bagian 1 Langkah 6 -->
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 Data Kategori <strong> berhasil </strong> <?= $this->session->flashdata('flash-data'); ?>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">

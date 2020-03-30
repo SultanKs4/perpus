@@ -1,4 +1,3 @@
-<!-- Jobsheet 5 Praktikum Bagian 1 Langkah 19 -->
 <?php
 
 use GuzzleHttp\Exception\GuzzleException;
@@ -151,4 +150,4 @@ class buku extends CI_Controller
     }
 }
     
-    /* End of file user.php */
+    /* End of file Buku.php */

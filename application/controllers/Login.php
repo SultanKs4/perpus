@@ -1,4 +1,3 @@
-<!-- Jobsheet 5 Praktikum Bagian 1 Langkah 2 -->
 <?php
 
 use GuzzleHttp\Exception\GuzzleException;
@@ -9,7 +8,6 @@ class login extends CI_Controller
 {
     private $client;
 
-    // Jobsheet 5 Praktikum Bagian 1 Langkah 9
     public function __construct()
     {
         parent::__construct();
@@ -24,7 +22,6 @@ class login extends CI_Controller
         $this->load->view('template/footer');
     }
 
-    // Jobsheet 5 Praktikum Bagian 1 Langkah 10
     public function proses_login()
     {
         $username = htmlspecialchars($this->input->post('username'));
@@ -48,16 +45,13 @@ class login extends CI_Controller
                 redirect('buku');
             }
         } catch (GuzzleException $th) {
-            // Jobsheet 5 Praktikum Bagian 1 Langkah 16
             $data['pesan'] = "username dan password anda salah";
             $data['title'] = 'Login';
             $this->load->view('template/header_login', $data);
             $this->load->view('login/index');
             $this->load->view('template/footer');
-            // redirect('login/index', 'refresh');
         }
     }
-    // Jobsheet 5 Langkah 1 Bagian 22
     public function logout()
     {
         $this->session->sess_destroy();

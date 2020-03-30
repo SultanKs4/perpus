@@ -2,7 +2,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header font-weight-bold">
-                Form Edit Data Buku
+                Form Tambah Data Buku
             </div>
             <div class="card-body">
                 <?php if (validation_errors()) : ?>

@@ -1,5 +1,3 @@
-<!-- Jobsheet 5 Praktikum Bagian 1 Langkah 1 -->
-<!-- Jobsheet 5 Praktikum Bagian 1 Langkah 8 -->
 <?=
     form_open('login/proses_login');
 ?>
@@ -32,11 +30,7 @@
                                     id="btnlogin">Login</button>
                             </form>
                         </div>
-                        <!-- card block -->
                     </div>
-                    <!-- form login -->
-                    <!-- Jobsheet 5 Praktikum Bagian 1 Langkah 16 -->
-                    <!-- cek pesan -->
                     <div class="alert alert-info" role="alert">
                         <?php
                         if (isset($pesan)) {
@@ -48,13 +42,9 @@
                     </div>
                 </div>
             </div>
-            <!-- row -->
         </div>
-        <!-- col -->
     </div>
-    <!-- row -->
 </div>
-<!-- container -->
 
 <?=
     form_close();
