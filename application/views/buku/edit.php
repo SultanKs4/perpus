@@ -35,7 +35,7 @@
                         <select class="form-content" id="idkategori" name="idkategori">
                             <!-- Jobsheet 4 Praktikum Bagian 1 Langkah 7 F -->
                             <?php foreach ($kategori as $key) :  ?>
-                            <?php if ($key['id'] == $buku['idkategori']) : ?>
+                            <?php if ($key['nama'] == $buku['kategori']) : ?>
                             <option value="<?= $key['id'] ?>" selected><?= $key['nama'] ?></option>
                             <?php else : ?>
                             <option value="<?= $key['id'] ?>"><?= $key['nama'] ?></option>
